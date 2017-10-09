@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a602ae7b-c7b9-419f-8c8e-1bb872b4fd98" name="System.out.printf(&quot;Che kak?&quot;);" comment="System.out.printf(&quot;Che kak?&quot;);">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/project-template.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/SecCode.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/SecCode/com/company/Main.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="a602ae7b-c7b9-419f-8c8e-1bb872b4fd98" name="System.out.printf(&quot;Che kak?&quot;);" comment="System.out.printf(&quot;Che kak?&quot;);" />
     <list id="319e7212-fc5b-4aa0-b394-c1cbf72597c5" name="Default" comment="System.out.printf(&quot;Che kak?&quot;);" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
