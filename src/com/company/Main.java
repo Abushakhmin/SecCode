@@ -1,5 +1,6 @@
 package com.company;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InvalidClassException;
 import java.nio.file.*;
@@ -25,13 +26,19 @@ public class Main {
         if (args[0].equals("rm")) {
             delFile(args[1]);
         }
+
+        if (args[0].equals("ll")) {
+            listFile(args[1]);
+        }
     }
 
     private static void copyFile(String arg, String arg1, String arg2){
         try {
             System.out.println("Получена команда " + arg + " Выполняем копирование....");
+
             Path source = Paths.get(arg1);
             Path target = Paths.get(arg2);
+
             // скопировать файл
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Выполнилось копирование. Но это не точно. Проверяй вручную пока");
@@ -47,11 +54,15 @@ public class Main {
 
     private static void catFile(String arg, String arg1, String arg2){
         try {
+
             System.out.println("Получена команда " + arg + " Выполняем перемещение....");
+
             Path source = Paths.get(arg1);
             Path target = Paths.get(arg2);
+
             // переместить\вырезать файл
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+
             System.out.println("Выполнилось копирование. Но это не точно. Проверяй вручную пока");
 
             delFile(String.valueOf(source));
@@ -67,9 +78,9 @@ public class Main {
         }
     }
 
-    private static void delFile(String arg){
+    private static void delFile(String arg1){
 
-        Path del = Paths.get(arg);
+        Path del = Paths.get(arg1);
 
         System.out.println("Выполняется удаление....");
         try {
@@ -88,6 +99,25 @@ public class Main {
         catch (IOException x) {
             // File permission problems are caught here.
             System.err.println(x);
+        }
+    }
+
+    private static void listFile(String arg1) {
+
+        File folder = new File(arg1);
+
+        if(folder.isDirectory()) {
+
+            for (File item : folder.listFiles()) {
+
+                if (item.isDirectory()) {
+                    System.out.println(folder.getName() + "\tкаталог");
+                }
+
+                else {
+                    System.out.println(folder.getName() + "\tфайл");
+                }
+            }
         }
     }
 }
