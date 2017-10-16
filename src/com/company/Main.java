@@ -9,53 +9,94 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Если аргументов не равно 3, то выводим сообщение
-        if (args.length != 3) {
-            System.out.println("Введите аргументы. Пример: cp /home/roman/workspace/test/first_forder/text /home/roman/workspace/test/second_forder/text1");
-            return;
-        }
+        switch(args[0]) {
 
-        if (args[0].equals("cp")) {
-            copyFile(args[0], args[1], args[2]);
-        }
+            case "cp":
+                System.out.println("Запуск копирования...");
+                Cop.onCop(args[1], args[2]);
+                System.out.println("Аргумент: " + args[1] + " Скопирован в: " + args[2]);
+                break;
 
-        if (args[0].equals("mv")) {
-            catFile(args[0], args[1], args[2]);
-        }
+            case "rm":
+                System.out.println("Запуск удаления...");
+                Del.onDel(args[1]);
+                System.out.println("Аргумент: " + args[1] + " удален");
+                break;
 
-        if (args[0].equals("rm")) {
-            delFile(args[1]);
-        }
+            case "mv":
+                System.out.println("Запуск перемещения или переименования...");
+                Cat.onCat(args[1], args[2]);
+                System.out.println("Итоговый результат: " + args[2]);
+                break;
 
-        if (args[0].equals("ll")) {
-            listFile(args[1]);
+            case "ll":
+                System.out.println("Выводим список каталогов и файлов...");
+                Lis.onLis(args[1]);
+                System.out.println("Конец");
+                break;
+
+            case "mkdir":
+                System.out.println("Создаем директорию...");
+                Dir.onDir(args[1]);
+                System.out.println("Конец");
+                break;
+
+            case "file":
+                System.out.println("Создаем файл...");
+                Fil.onFil(args[1]);
+                System.out.println("Конец");
+                break;
+
+            default:
+                System.out.println("Ошибка в команде...");
         }
     }
+}
 
-    private static void copyFile(String arg, String arg1, String arg2){
+class Cop extends Main {
+
+    static void onCop(String arg1, String arg2){
         try {
-            System.out.println("Получена команда " + arg + " Выполняем копирование....");
-
             Path source = Paths.get(arg1);
             Path target = Paths.get(arg2);
-
             // скопировать файл
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Выполнилось копирование. Но это не точно. Проверяй вручную пока");
         }
-        // Исключения
+
         catch (InvalidClassException e) {
-            System.out.println("Ошибка указания пути " + e);
+                System.out.println("Ошибка указания пути " + e);
         }
+
         catch (IOException e) {
-            System.out.println("Ошибка ввода вывода " + e);
+                System.out.println("Ошибка ввода вывода " + e);
         }
     }
+}
 
-    private static void catFile(String arg, String arg1, String arg2){
+class Del extends Main {
+
+    static void onDel(String arg1) {
+
+        Path del = Paths.get(arg1);
+
         try {
+            Files.delete(del);
 
-            System.out.println("Получена команда " + arg + " Выполняем перемещение....");
+        } catch (NoSuchFileException x) {
+            System.err.format("%s: no such" + " file or directory%n", del);
+        } catch (DirectoryNotEmptyException x) {
+            System.err.format("%s not empty%n", del);
+        } catch (IOException x) {
+            // File permission problems are caught here.
+            System.err.println(x);
+        }
+    }
+}
+
+class Cat extends Main {
+
+    static void onCat(String arg1, String arg2){
+        try {
 
             Path source = Paths.get(arg1);
             Path target = Paths.get(arg2);
@@ -63,11 +104,8 @@ public class Main {
             // переместить\вырезать файл
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
 
-            System.out.println("Выполнилось копирование. Но это не точно. Проверяй вручную пока");
+            Del.onDel(String.valueOf(source));
 
-            delFile(String.valueOf(source));
-
-            System.out.println("Готово!!! Файл перемещен!");
         }
         // Исключения
         catch (InvalidClassException e) {
@@ -77,47 +115,58 @@ public class Main {
             System.out.println("Ошибка ввода вывода " + e);
         }
     }
+}
 
-    private static void delFile(String arg1){
+class Lis extends Main {
 
-        Path del = Paths.get(arg1);
 
-        System.out.println("Выполняется удаление....");
-        try {
-            Files.delete(del);
+    static void onLis(String arg1){
 
-        }
-
-        catch (NoSuchFileException x) {
-            System.err.format("%s: no such" + " file or directory%n", del);
-        }
-
-        catch (DirectoryNotEmptyException x) {
-            System.err.format("%s not empty%n", del);
-        }
-
-        catch (IOException x) {
-            // File permission problems are caught here.
-            System.err.println(x);
-        }
-    }
-
-    private static void listFile(String arg1) {
-
-        File folder = new File(arg1);
-
-        if(folder.isDirectory()) {
-
-            for (File item : folder.listFiles()) {
-
-                if (item.isDirectory()) {
-                    System.out.println(folder.getName() + "\tкаталог");
-                }
-
-                else {
-                    System.out.println(folder.getName() + "\tфайл");
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(arg1))) {
+            for (Path file: stream) {
+                if(!file.toFile().isDirectory() ) {
+                    System.out.println(file.getFileName());
                 }
             }
+        } catch (IOException | DirectoryIteratorException x) {
+                System.err.println(x);
         }
     }
 }
+
+class Dir extends Main {
+
+    static void onDir(String arg1) {
+        Path path = Paths.get(arg1);
+
+        try {
+            Files.createDirectory(path);
+        }
+
+        catch (FileAlreadyExistsException e){
+            // the directory already exists.
+        }
+
+        catch (IOException e) {
+            //something else went wrong
+        e.printStackTrace();
+        }
+    }
+}
+
+class Fil extends Main {
+
+    static void onFil(String arg1) {
+        File filPath = new File(arg1);
+        filPath.mkdir();
+
+        try {
+            filPath.createNewFile();
+        }
+
+        catch (IOException e) {
+                e.printStackTrace();
+        }
+    }
+}
+
